@@ -1,0 +1,41 @@
+version: "3"
+
+networks:
+  pythonapp:
+    
+services:
+  app:
+    container_name: containerize_app_1
+    image: flask_server:latest
+    build: ./app
+    volumes:
+      - "./app/src:/app/src"
+      - "./nginx/certs/localhost.crt:/app/conf/app.crt"
+      - "./nginx/certs/localhost.key:/app/conf/app.key"
+    user: app
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    networks:
+      - pythonapp
+    environment:
+      FLASK_ENV: "production"
+
+  nginx:
+    container_name: containerize_nginx_1
+    image: nginx_server:latest
+    build: ./nginx
+    volumes:
+      - "./nginx/certs/localhost.crt:/etc/nginx/ssl/app.crt"
+      - "./nginx/certs/localhost.key:/etc/nginx/ssl/app.key"
+    ports:
+      - "443:443"
+      - "80:8080"
+    user: nginx
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    networks:
+      - pythonapp
