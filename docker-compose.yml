@@ -10,8 +10,8 @@ services:
     build: ./app
     volumes:
       - "./app/src:/app/src"
-      - "./nginx/certs/localhost.crt:/app/conf/app.crt"
-      - "./nginx/certs/localhost.key:/app/conf/app.key"
+      - "./nginx/files/localhost.crt:/app/conf/app.crt"
+      - "./nginx/files/localhost.key:/app/conf/app.key"
     user: app
     deploy:
       resources:
@@ -27,8 +27,8 @@ services:
     image: nginx_server:latest
     build: ./nginx
     volumes:
-      - "./nginx/certs/localhost.crt:/etc/nginx/ssl/app.crt"
-      - "./nginx/certs/localhost.key:/etc/nginx/ssl/app.key"
+      - "./nginx/files/localhost.crt:/etc/nginx/ssl/app.crt"
+      - "./nginx/files/localhost.key:/etc/nginx/ssl/app.key"
     ports:
       - "443:443"
       - "80:8080"

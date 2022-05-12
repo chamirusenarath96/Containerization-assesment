@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # variabvles
-FLASK_APP_PORT = 8000
-WORKERS = 4
-CERT = /app/conf/app.crt 
-KEY = /app/conf/app.key
+FLASK_APP_PORT=8000
+WORKERS=4
+CERT=/app/conf/app.crt 
+KEY=/app/conf/app.key
 
 
 echo "[INFO] waiting..."
 sleep 5
 
-cd app/src
+cd /app/src
 echo "[INFO] Loading..."
 
 gunicorn \

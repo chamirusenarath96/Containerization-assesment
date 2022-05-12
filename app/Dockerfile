@@ -9,17 +9,21 @@ ARG APP_ROOT=/app
 USER root
 
 # copying content, only requirements.txt is needed
-RUN mkdir "$APP_ROOT"/src
-COPY src/ "$APP_ROOT"/src/
+RUN mkdir -p "$APP_ROOT"/src
+COPY src/ "$APP_ROOT"/src
 COPY run.sh "$APP_ROOT"/
 
+
 # Installing python packages
-RUN apt-get-update && \
-    pip install --upgrade pip && \
-    pip install -r --no-cache-dir "$APP_ROOT"/src/requirements.txt
+RUN apt-get update && \
+    pip install --upgrade pip
+
+RUN cat "$APP_ROOT"/src/requirements.txt
+
+RUN pip install --upgrade -r "$APP_ROOT"/src/requirements.txt
 
 #debuggin
-RUN ls /etc/app -l
+RUN ls "$APP_ROOT"/src -l
 
 #creating new user-group and adding new user
 RUN groupadd "$APP_GROUP" && \
@@ -29,7 +33,7 @@ RUN groupadd "$APP_GROUP" && \
 
 #modify file ownership for user as a security implementation
 RUN chown -R "$APP_USER":"$APP_GROUP" "$APP_ROOT" && \
-    chown +x "$APP_ROOT"/run.sh
+    chmod +x "$APP_ROOT"/run.sh
 
 #exposing the flask app to the nginx
 EXPOSE ${FLASK_APP_PORT}
